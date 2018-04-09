@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+
+
+<launch>
+    <arg name="dev" default="/dev/ttyACM0"/>
+
+    <node name="quido_usb"
+          pkg="papouch_ros"
+	  type="quido_node"
+          args="--dev $(arg dev)"/>
+
+</launch>
