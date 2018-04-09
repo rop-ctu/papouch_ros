@@ -1,0 +1,16 @@
+
+<?xml version="1.0"?>
+<package format="2">
+  <name>papouch_ros</name>
+  <version>0.1.0</version>
+  <description>The papouch_ros package</description>
+
+  <maintainer email="libor.wagner@cvut.cz">Libor Wagner</maintainer>
+  <license>b635</license>
+
+  <build_depend>message_generation</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

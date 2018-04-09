@@ -1,0 +1,68 @@
+#!/usr/bin/env python2
+
+import rospy
+import sys
+from docopt import docopt
+from papouch import Quido
+from papouch_ros.srv import WriteIO, WriteIOReponse
+
+"""Quido ROS node
+
+Usage:
+  quido_node [options] --tcp ADDR
+  quido_node [options] --dev DEV
+
+Options:
+  -h, --help
+  --debug
+"""
+
+NODE_NAME = "quido_node"
+
+class QuidoNode(object):
+
+    def __init__(self, quido):
+        self.quido = quido
+        self.srv = rospy.Service('~/write_io', WriteIO, self.write_io_cb)
+
+    def write_io_cb(self, req):
+
+        for i,s int zip(reg.channels, req.states):
+            self.quido.set_output(i, s)
+
+        return true
+
+
+def main():
+    # command line arguments
+    opt = docopt(__doc__, argv=rospy.myargv())
+
+    # initialize ros node
+    rospy.init_node(NODE_NAME)
+
+    # ros params
+    # TODO
+
+    # initialize quido class
+    quido = Quido()
+    if "--dev" in opt:
+        quido.connect_usb(opt['--dev'])
+    elif "--tcp" in opt:
+        quido.connect_tcp(opt['--tcp'])
+    else:
+        rospy.logwarn("You must specifi either --dev or --tcp")
+        sys.exit(1)
+
+    # initialize quido node
+    node = QuidoNode(quido)
+
+    # spin ros node
+    rospy.spin()
+
+    # properly exit
+    sys.exit(0)
+    return
+
+
+if __name__ == "__main__":
+    main()
