@@ -9,8 +9,8 @@ from papouch_ros.srv import WriteIO, WriteIOReponse
 """Quido ROS node
 
 Usage:
-  quido_node [options] --tcp ADDR
-  quido_node [options] --dev DEV
+  quido_node [options] --eth ADDR
+  quido_node [options] --usb DEV
 
 Options:
   -h, --help
@@ -46,11 +46,11 @@ def main():
     # initialize quido class
     quido = Quido()
     if "--dev" in opt:
-        quido.connect_usb(opt['--dev'])
+        quido.connect_usb(opt['--usb'])
     elif "--tcp" in opt:
-        quido.connect_tcp(opt['--tcp'])
+        quido.connect_tcp(opt['--eth'])
     else:
-        rospy.logwarn("You must specifi either --dev or --tcp")
+        rospy.logwarn("You must specifi either --usb or --eth")
         sys.exit(1)
 
     # initialize quido node
