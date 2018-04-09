@@ -1,21 +1,23 @@
 #!/usr/bin/env python2
 
-import rospy
-import sys
-from docopt import docopt
-from papouch import Quido
-from papouch_ros.srv import WriteIO, WriteIOReponse
-
 """Quido ROS node
 
 Usage:
-  quido_node [options] --eth ADDR
-  quido_node [options] --usb DEV
+  quido_node [options]
 
 Options:
   -h, --help
   --debug
+  --eth ADDR
+  --usb DEV
 """
+
+import rospy
+import sys
+from docopt import docopt
+from papouch import Quido
+from papouch_ros.srv import WriteIO, WriteIOResponse
+import logging
 
 NODE_NAME = "quido_node"
 
@@ -27,15 +29,20 @@ class QuidoNode(object):
 
     def write_io_cb(self, req):
 
-        for i,s int zip(reg.channels, req.states):
+        for i,s in zip(req.channel, req.state):
             self.quido.set_output(i, s)
 
-        return true
+        return True
 
 
 def main():
     # command line arguments
-    opt = docopt(__doc__, argv=rospy.myargv())
+    opt = docopt(__doc__, argv=rospy.myargv()[1:])
+
+    # debug
+    logging.basicConfig (level='DEBUG' if opt['--debug'] else 'INFO')
+    if opt['--debug']:
+        rospy.loginfo("Params: \n%s", str(opt))
 
     # initialize ros node
     rospy.init_node(NODE_NAME)
@@ -45,9 +52,11 @@ def main():
 
     # initialize quido class
     quido = Quido()
-    if "--dev" in opt:
+    if "--usb" in opt and opt['--usb']:
+        rospy.loginfo("Connecting to Quido USB on %s", opt['--usb'])
         quido.connect_usb(opt['--usb'])
-    elif "--tcp" in opt:
+    elif "--eth" in opt and opt['--eth']:
+        rospy.loginfo("Connecting to Quido ETH on %s", opt['--eth'])
         quido.connect_tcp(opt['--eth'])
     else:
         rospy.logwarn("You must specifi either --usb or --eth")

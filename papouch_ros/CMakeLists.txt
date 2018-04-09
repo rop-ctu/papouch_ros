@@ -103,7 +103,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES papouch_ros
-#  CATKIN_DEPENDS other_catkin_pkg
+  CATKIN_DEPENDS CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
