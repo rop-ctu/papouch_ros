@@ -3,11 +3,11 @@
 
 
 <launch>
-    <arg name="dev" default="/dev/ttyACM0"/>
+    <arg name="usb" default="/dev/ttyACM0"/>
 
     <node name="quido_usb"
           pkg="papouch_ros"
 	  type="quido_node"
-          args="--dev $(arg dev)"/>
+          args="--usb $(arg usb)"/>
 
 </launch>
