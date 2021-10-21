@@ -36,8 +36,6 @@ class QuidoNode(object):
 
 
 def main():
-    # command line arguments
-    opt = docopt(__doc__, argv=rospy.myargv()[1:])
 
     # debug
     logging.basicConfig (level='DEBUG' if opt['--debug'] else 'INFO')
@@ -47,8 +45,7 @@ def main():
     # initialize ros node
     rospy.init_node(NODE_NAME)
 
-    # ros params
-    # TODO
+    # ROS params
 
     # initialize quido class
     quido = Quido()
@@ -74,4 +71,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # command line arguments
+    opt = docopt(__doc__, argv=rospy.myargv()[1:])
+
     main()
