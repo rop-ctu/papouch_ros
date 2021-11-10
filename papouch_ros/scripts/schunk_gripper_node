@@ -54,7 +54,7 @@ class SchunkGripperNode(object):
         self.action_server = actionlib.SimpleActionServer(self.action_name, GripperCommandAction, execute_cb=self.action_execute_cb, auto_start=False)
 
         # publish joint states
-        self.joint_state_pub = rospy.Publisher('joint_states', sensor_msgs.msg.JointState, queue_size = 50)
+        self.joint_state_pub = rospy.Publisher('joint_states', JointState, queue_size = 50)
 
         # service to change the stay energized flag
         self.stay_energized_srv = rospy.Service('set_stay_energized', SetBool, self.set_stay_energized_cb)
