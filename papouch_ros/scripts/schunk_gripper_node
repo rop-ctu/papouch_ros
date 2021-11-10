@@ -9,6 +9,7 @@ from papouch_ros.srv import WriteIO, WriteIORequest
 from control_msgs.msg import GripperCommandAction, GripperCommandFeedback, GripperCommandResult
 from sensor_msgs.msg import JointState
 from std_srvs.srv import SetBool, SetBoolResponse
+import actionlib
 
 
 NODE_NAME = "schunk_gripper_node"
