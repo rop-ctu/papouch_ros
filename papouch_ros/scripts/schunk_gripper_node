@@ -47,7 +47,7 @@ class SchunkGripperNode(object):
         self.joint_state_msg = JointState()
         self.joint_state_msg.header.frame_id = ''
         self.joint_state_msg.name = [self.joint_name]
-        self.joint_state.msg.position = [self.joint_state]
+        self.joint_state_msg.position = [self.joint_state]
 
         # action server for the gripper
         self.action_server = actionlib.SimpleActionServer(self.action_name, GripperCommandAction, execute_cb=self.action_execute_cb, auto_start=False)
