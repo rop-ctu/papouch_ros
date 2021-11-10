@@ -142,7 +142,7 @@ class SchunkGripperNode(object):
         rate = rospy.Rate(self.joint_state_rate)
         while not rospy.is_shutdown():
             # update time stamp
-            self.joint_state_msg.header.stamp = rospy.get_ros_time()
+            self.joint_state_msg.header.stamp = rospy.get_rostime()
 
             # update position
             self.joint_state_msg.position = [self.joint_state]
