@@ -41,7 +41,7 @@ class SchunkGripperNode(object):
         self.joint_name = str(rospy.get_param('joint_name', 'gripper_joint'))
         self.joint_limit = [0, float(rospy.get_param('joint_limit', 0.04))]
         self.joint_state = float(rospy.get_param('joint_state', 0.0))
-        self.joint_state_rate = rospy.Rate(int(rospy.get_param('joint_state_rate', 10)))
+        self.joint_state_rate = float(rospy.get_param('joint_state_rate', 10))
         self.last_cmd_stamp = rospy.get_time()
 
         # message prototype
