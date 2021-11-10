@@ -132,7 +132,7 @@ class SchunkGripperNode(object):
 
                 # check output
                 assert ret.retval == True
-            except AssertError as e:
+            except AssertionError as e:
                 raise SchunkGripperException("Failed to set quido output!")
 
         # store the stamp of this command
