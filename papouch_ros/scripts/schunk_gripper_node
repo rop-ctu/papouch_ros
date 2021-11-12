@@ -39,7 +39,8 @@ class SchunkGripperNode(object):
         self.stay_energized = bool(rospy.get_param('~stay_energized', False))
         self.action_name = str(rospy.get_param('~action_name', 'gripper_action'))
         self.joint_name = str(rospy.get_param('~joint_name', 'joint_gripper'))
-        self.joint_limit = [0, float(rospy.get_param('~joint_limit', 0.04))]
+        self.joint_min_pos = float(rospy.get_param('~joint_min_pos', 0.01))
+        self.joint_max_pos = float(rospy.get_param('~joint_max_pos', 0.02))
         self.joint_state = float(rospy.get_param('~joint_state', 0.0))
         self.joint_state_rate = float(rospy.get_param('~joint_state_rate', 10))
         self.last_cmd_stamp = rospy.get_time()
@@ -96,11 +97,11 @@ class SchunkGripperNode(object):
             self.write_io(False, False)
 
             # convert linear position to discreate state
-            if goal_position > self.joint_limit[1]/2:
-                goal_position = self.joint_limit[1]
+            if abs(self.joint_min_pos - goal_position) > abs(self.joint_max_pos - goal_position) :
+                goal_position = self.joint_max_pos
                 self.write_io(True, False)
             else:
-                goal_position = self.joint_limit[0]
+                goal_position = self.joint_min_pos
                 self.write_io(False, True)
 
             # wait for gripper to finish its movement
