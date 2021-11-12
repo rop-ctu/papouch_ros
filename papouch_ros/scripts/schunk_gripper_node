@@ -67,6 +67,9 @@ class SchunkGripperNode(object):
                 raise SchunkGripperException('Timeout when waiting for service ' + self.write_io_srv)
             self.write_io_proxy = rospy.ServiceProxy(self.write_io_srv, WriteIO)
 
+        # start the action server
+        self.action_server.start()
+
     def set_stay_energized_cb(self, req):
         """Callback function for set_stay_energized service."""
 
