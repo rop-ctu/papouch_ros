@@ -13,7 +13,7 @@ import actionlib
 
 
 NODE_NAME = "schunk_gripper_node"
-time_between_commands = 1
+time_between_commands = 0.2
 time_of_motion = 1
 
 
@@ -88,8 +88,10 @@ class SchunkGripperNode(object):
         # copy goal position from message
         goal_position = goal.command.position
 
-        try:
+        # logging
+        rospy.loginfo('Received new position goal: %f', goal_position)
 
+        try:
             # unenergize the gipper
             self.write_io(False, False)
 
@@ -120,8 +122,10 @@ class SchunkGripperNode(object):
 
     def write_io(self, open_sig_state, close_sig_state):
         # sleep between commands if this command is too soon
-        if self.last_cmd_stamp - rospy.get_time() < time_between_commands:
-            rospy.sleep(time_between_commands - (self.last_cmd_stamp - rospy.get_time()))
+        t_now = rospy.get_time()
+
+        if (t_now - self.last_cmd_stamp) < time_between_commands:
+            rospy.sleep(time_between_commands - (t_now - self.last_cmd_stamp))
 
         # call service if not in dummy mode
         if not self.dummy_mode:
@@ -153,9 +157,6 @@ class SchunkGripperNode(object):
             # publish message
             self.joint_state_pub.publish(self.joint_state_msg)
             rate.sleep()
-
-        # unenergize the gripper when shutdown
-        self.write_io(False, False)
 
 
 def main():
