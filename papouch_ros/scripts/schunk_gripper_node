@@ -122,6 +122,8 @@ class SchunkGripperNode(object):
         self.action_server.set_succeeded(result)
 
     def write_io(self, open_sig_state, close_sig_state):
+        rospy.loginfo('write_io(open_sig_state=%d, close_sig_state=%d)', open_sig_state, close_sig_state)
+
         # sleep between commands if this command is too soon
         t_now = rospy.get_time()
 
