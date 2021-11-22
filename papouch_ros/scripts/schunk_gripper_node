@@ -91,6 +91,8 @@ class SchunkGripperNode(object):
 
         # logging
         rospy.loginfo('Received new position goal: %f', goal_position)
+        rospy.loginfo("%f > %f", abs(self.joint_min_pos - goal_position), abs(self.joint_max_pos - goal_position))
+
 
         try:
             # unenergize the gipper
