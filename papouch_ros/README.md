@@ -12,7 +12,17 @@ mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 
 git clone --recursive https://github.com/rop-ctu/papouch_ros.git
+cd ..
+
+# Install all dependencies that are available as binaries
+source "/opt/ros/$ROS_DISTRO/setup.bash"
+sudo apt-get update
+rosdep update --rosdistro "$ROS_DISTRO"
+rosdep install -y -i --from-paths src --rosdistro $ROS_DISTRO
+
+# Build workspace
 colcon build
+source ~/ros2_ws/install/setup.bash
 ```
 
 ## Running
