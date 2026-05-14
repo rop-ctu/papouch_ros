@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <arg name="usb" default="/dev/quido"/>
-    <node name="quido_usb" pkg="papouch_ros" type="quido_node" args="--usb $(arg usb)"/>
-</launch>

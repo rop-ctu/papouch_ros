@@ -1,0 +1,66 @@
+---
+schunk_gripper_params:
+  write_io_srv:
+    type: string
+    default_value: /quido/io
+    description: "Service name for IO module"
+
+  close_io:
+    type: int
+    default_value: 1
+    description: "Channel to activate for closing the gripper"
+
+  open_io:
+    type: int
+    default_value: 2
+    description: "Channel to activate for opening the gripper"
+
+  time_between_commands:
+    type: double
+    default_value: 0.2
+    description: "Minimal time between IO commands"
+
+  stay_energized:
+    type: bool
+    default_value: False
+    description: ""
+
+  action_name:
+    type: string
+    default_value: action
+    description: "Action server name suffix for GripperCommand"
+
+  service_name_simple:
+    type: string
+    default_value: activate
+    description: "Service name suffix for simple boolean open/close command"
+
+  service_name_stay_energized:
+    type: string
+    default_value: set_stay_energized
+    description: "Service name suffix for setting the stay-energized flag."
+
+  joint_name:
+    type: string
+    default_value: joint_gripper
+    description: ""
+
+  joint_min_pos:
+    type: double
+    default_value: 0.01
+    description: ""
+
+  joint_max_pos:
+    type: double
+    default_value: 0.02
+    description: ""
+
+  joint_state_dt:
+    type: double
+    default_value: 0.1
+    description: ""
+
+  time_of_motion:
+    type: double
+    default_value: 1.0
+    description: ""

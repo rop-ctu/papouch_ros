@@ -1,15 +1,23 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>papouch_ros</name>
   <version>0.1.0</version>
-  <description>The papouch_ros package</description>
+  <description>The papouch ROS package</description>
 
   <maintainer email="libor.wagner@cvut.cz">Libor Wagner</maintainer>
   <license>b635</license>
 
-  <build_depend>message_generation</build_depend>
-  <buildtool_depend>catkin</buildtool_depend>
-  <depend>message_runtime</depend>
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <build_depend>generate_parameter_library</build_depend>
+  <build_depend>generate_parameter_library_py</build_depend>
+
+  <!-- Dependencies for the papouch python package -->
+  <exec_depend>python3-serial</exec_depend>
+
   <export>
+    <build_type>ament_cmake</build_type>
   </export>
+
 </package>
