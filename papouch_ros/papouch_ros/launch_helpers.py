@@ -55,7 +55,7 @@ def schunk_gripper_args():
     return [
         DeclareLaunchArgument(
             "schunk_gripper_params",
-            default_value="schunk_gripper_params.yaml",
+            default_value="config/schunk_gripper_parameters.yaml",
             description="Gripper parameters (yaml file).",
         ),
     ]

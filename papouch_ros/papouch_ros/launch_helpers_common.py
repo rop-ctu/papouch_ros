@@ -10,7 +10,7 @@ from launch.substitutions import (
 from launch.substitution import Substitution
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
-from launch.actions import RegisterEventHandler, EmitEvent
+from launch.actions import RegisterEventHandler, EmitEvent, LogInfo
 from launch.events import Shutdown
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
@@ -31,7 +31,6 @@ from launch.utilities import normalize_to_list_of_substitutions
 __all__ = [
     "path_join",
     "SetupContext",
-    "LogError",
     "parameter_value_xacro",
     "include_path_join",
     "remap_to_ns",
@@ -107,32 +106,15 @@ class SetupContext:
         return pth_subst
 
 
-@expose_action('log_error')
-class LogError(Action):
+# Do not use expose_action(...) here; this file can be copied into other
+# packages, and the action name would be wrongly exposed multiple times.
+
+class LogError(LogInfo):
     """Action that logs a message when executed."""
 
-    def __init__(self, *, msg: SomeSubstitutionsType, **kwargs):
-        """Create a LogInfo action."""
-        super().__init__(**kwargs)
-
-        self.__msg = normalize_to_list_of_substitutions(msg)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.__logger = launch.logging.get_logger('launch.user')
-
-    @classmethod
-    def parse(
-            cls,
-            entity: Entity,
-            parser: 'Parser'
-    ):
-        """Parse `log` tag."""
-        _, kwargs = super().parse(entity, parser)
-        kwargs['msg'] = parser.parse_substitution(entity.get_attr('message'))
-        return cls, kwargs
-
-    @property
-    def msg(self) -> List[Substitution]:
-        """Getter for self.__msg."""
-        return self.__msg
 
     def execute(self, context: LaunchContext) -> None:
         """Execute the action."""
