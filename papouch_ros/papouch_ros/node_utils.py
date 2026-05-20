@@ -1,11 +1,34 @@
 import argparse
-from typing import Optional
+from typing import Optional, Callable
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter_client import AsyncParameterClient
 from rclpy.parameter import parameter_value_to_python
-from rclpy.action import ActionClient
+from rclpy.action import ActionClient, ActionServer
 from rclpy.client import Client
+
+import os
+from rclpy.node import SrvTypeRequest, SrvTypeResponse, Service
+
+ros_distro = os.environ.get("ROS_DISTRO")
+if ros_distro == 'humble':
+    from rcl_interfaces.srv import GetParameters
+
+
+    class AsyncParameterClient:
+        def __init__(self, self_node, remote_node_name):
+            self.client = self_node.create_client(GetParameters,
+                                                  remote_node_name + '/get_parameters')
+
+        def wait_for_services(self, *args, **kwargs):
+            return self.client.wait_for_service(*args, **kwargs)
+
+        def get_parameters(self, param_list):
+            req = GetParameters.Request()
+            req.names = param_list
+            future = self.client.call_async(req)
+            return future
+else:
+    from rclpy.parameter_client import AsyncParameterClient
 
 
 def init_spin_node(args, node_class: type,
@@ -37,6 +60,14 @@ def init_spin_node(args, node_class: type,
             node.destroy_node()
         if rclpy.ok:
             rclpy.shutdown()
+
+
+def node_namespace(self_node: Node) -> str:
+    """Node namespace always ending with a slash."""
+
+    ns = self_node.get_namespace()
+    assert ns.startswith('/')
+    return ns if ns == '/' else ns + '/'
 
 
 def get_param_list_from_node(self_node: Node, remote_node_name: str,
@@ -85,26 +116,44 @@ def action_client(self_node: Node,
 
     # add namespace of to action server name if not absolute (for printing)
     if not action_name.startswith('/'):
-        ns = self_node.get_namespace()
-        assert ns.startswith('/')
-        if ns == '/':
-            action_name = '/' + action_name
-        else:
-            action_name = ns + '/' + action_name
+        # name is relative to the node namespace
+        action_name = node_namespace(self_node) + action_name
 
     while not client.wait_for_server(timeout_sec=1.0):
         self_node.get_logger().warn(
             f'Waiting for action server {action_name}...')
 
-    self_node.get_logger().info(
-        f'Connected to action: {action_name}')
+    self_node.get_logger().info(f'Connected to action: {action_name}')
 
     return client
+
+
+def action_server(self_node: Node, action_type: type,
+                  action_name: str,
+                  callback: Callable,
+                  **kwargs) -> ActionServer:
+    """Create an action server."""
+
+    if not action_name.startswith('/'):
+        # name is relative to the node name (with namespace)
+        action_name = node_namespace(self_node) + self_node.get_name() + \
+                      '/' + action_name
+
+    action = ActionServer(
+        self_node, action_type, action_name, callback, **kwargs)
+
+    self_node.get_logger().info(f"Action server started: {action_name}")
+
+    return action
 
 
 def service_client(self_node: Node, srv_type: type,
                    srv_name: str, **kwargs) -> Client:
     """Create a service client and connects it to a server."""
+
+    if not srv_name.startswith('/'):
+        # name is relative to the node namespace
+        srv_name = node_namespace(self_node) + srv_name
 
     client = self_node.create_client(srv_type, srv_name, **kwargs)
 
@@ -113,6 +162,24 @@ def service_client(self_node: Node, srv_type: type,
             f'Waiting for service {srv_name}...')
 
     self_node.get_logger().info(
-        f'Connected to service: {client.service_name}')
+        f'Connected to service: {client.srv_name}')
 
     return client
+
+
+def service_server(
+        self_node: Node, srv_type: type,
+        srv_name: str,
+        callback: Callable[[SrvTypeRequest, SrvTypeResponse], SrvTypeResponse],
+        **kwargs
+) -> Service:
+    """Create a service."""
+
+    if not srv_name.startswith('/'):
+        # name is relative to the node name (with namespace)
+        srv_name = node_namespace(self_node) + self_node.get_name() + \
+                   '/' + srv_name
+
+    srv = self_node.create_service(srv_type, srv_name, callback)
+    self_node.get_logger().info(f"Service started: {srv.srv_name}")
+    return srv

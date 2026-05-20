@@ -51,22 +51,24 @@ class SchunkGripperNode(Node):
         self.io_client_cb_group = ReentrantCallbackGroup()
 
         # action server for the gripper comman
-        self.action_server = ActionServer(
+        self.action_server = utils.action_server(
             self,
             GripperCommand,
-            self.get_name() + '/' + self.params.action_name,
+            self.params.action_name,
             self.action_execute_cb)
 
         # service for the simple gripper open/close
-        self.srv = self.create_service(
+        self.srv = utils.service_server(
+            self,
             SetBool,
-            self.get_name() + '/' + self.params.service_name_simple,
+            self.params.service_name_simple,
             self.gripper_activate_cb)
 
         # service to change the stay energized flag
-        self.stay_energized_srv = self.create_service(
+        self.stay_energized_srv = utils.service_server(
+            self,
             SetBool,
-            self.get_name() + '/' + self.params.service_name_stay_energized,
+            self.params.service_name_stay_energized,
             self.set_stay_energized_cb)
 
         # publish joint states publisher and loop

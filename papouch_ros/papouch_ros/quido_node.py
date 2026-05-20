@@ -4,9 +4,10 @@ from rclpy.node import Node
 import sys
 from papouch import Quido, QuidoError
 from papouch_ros_idl.srv import WriteIO
-from .node_utils import init_spin_node
+from . import node_utils as utils
 
 DEFAULT_NODE_NAME = "quido"
+
 
 class QuidoNode(Node):
 
@@ -35,9 +36,7 @@ class QuidoNode(Node):
                 "Neither --usb nor --eth is given, running in dummy mode")
             self.quido = None
 
-        srv_name = self.get_name() + '/io'
-        self.srv = self.create_service(WriteIO, srv_name, self.write_io_cb)
-        self.get_logger().info(f"Service started: {self.srv.service_name}")
+        self.srv = utils.service_server(self, WriteIO, 'io', self.write_io_cb)
 
     def write_io_cb(self, req: WriteIO.Request, response: WriteIO.Response
                     ) -> WriteIO.Response:
@@ -65,7 +64,7 @@ def main(args=None):
     parser.add_argument("--usb", type=str, required=False)
     parser.add_argument("--eth", type=str, required=False)
 
-    init_spin_node(args, QuidoNode, parser)
+    utils.init_spin_node(args, QuidoNode, parser)
 
 
 if __name__ == "__main__":
