@@ -1,13 +1,13 @@
 ---
 /**/schunk_gripper:
   ros__parameters:
-    write_io_srv: /quido/io
+    write_io_srv: quido/io
     close_io: 1
     open_io: 2
     time_between_commands: 0.2
     stay_energized: False
-    action_name: gripper_action
-    service_name_simple: gripper_activate
+    action_name: action
+    service_name_simple: activate
     service_name_stay_energized: set_stay_energized
     joint_name: joint_gripper
     joint_min_pos: 0.01

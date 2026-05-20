@@ -2,7 +2,7 @@
 schunk_gripper_params:
   write_io_srv:
     type: string
-    default_value: /quido/io
+    default_value: quido/io
     description: "Service name for IO module"
 
   close_io:
