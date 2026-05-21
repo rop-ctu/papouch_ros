@@ -2,7 +2,7 @@ from launch import LaunchContext, LaunchDescription
 from launch.actions import OpaqueFunction
 from launch.launch_description_entity import LaunchDescriptionEntity
 from launch_ros.actions import Node
-from papouch_ros.launch_helpers import quido_node, quido_args, SetupContext
+from papouch_ros.launch_helpers import quido_node, quido_args, SetupContext, required_node
 
 
 def launch_setup(
@@ -22,11 +22,11 @@ def launch_setup(
     )
 
     return [
-        quido_node(usb=ctx.config("usb"),
-                   eth=ctx.config("eth"),
-                   name=quido_node_name,
-                   namespace=ns,
-                   ),
+        *required_node(quido_node(usb=ctx.config("usb"),
+                                  eth=ctx.config("eth"),
+                                  name=quido_node_name,
+                                  namespace=ns,
+                                  )),
         quido_test_node
     ]
 
