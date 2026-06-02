@@ -42,7 +42,7 @@ schunk_gripper_params:
 
   joint_name:
     type: string
-    default_value: joint_gripper
+    default_value: gripper_joint
     description: ""
 
   joint_min_pos:

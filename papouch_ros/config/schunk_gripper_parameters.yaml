@@ -9,7 +9,7 @@
     action_name: action
     service_name_simple: activate
     service_name_stay_energized: set_stay_energized
-    joint_name: joint_gripper
+    joint_name: gripper_joint
     joint_min_pos: 0.01
     joint_max_pos: 0.02
     joint_state_dt: 0.1
