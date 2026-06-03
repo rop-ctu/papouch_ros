@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<robot name="schunk_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:include
+            filename="$(find papouch_description)/urdf/_materials.urdf.xacro"/>
+
+    <xacro:macro name="schunk_gripper" params="parent name:=gripper">
+
+        <joint name="${name}_base_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <parent link="${parent}"/>
+            <child link="${name}_base"/>
+        </joint>
+
+        <link name="${name}_base">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://papouch_description/meshes/schunk_gripper_body.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="papouch:steel"/>
+            </visual>
+        </link>
+
+        <link name="${name}_finger_p">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+                <mass value="0.02" />
+                <inertia ixx="0.0003" ixy="0.0" ixz="0.0" iyy="0.0003" iyz="-0.00005" izz="0.00009" />
+            </inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://papouch_description/meshes/schunk_gripper_finger.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="papouch:black"/>
+            </visual>
+        </link>
+
+        <link name="${name}_finger_m">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <mass value="0.02" />
+                <inertia ixx="0.0003" ixy="0.0" ixz="0.0" iyy="0.0003" iyz="-0.00005" izz="0.00009" />
+            </inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://papouch_description/meshes/schunk_gripper_finger.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="papouch:black"/>
+            </visual>
+        </link>
+
+        <joint name="${name}_joint" type="prismatic">
+            <parent link="${name}_base"/>
+            <child link="${name}_finger_p"/>
+            <origin xyz="0 0 0.115" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="0.01" upper="0.02" effort="80.0" velocity="0.05"/>
+        </joint>
+
+        <joint name="${name}_joint_mirror" type="prismatic">
+            <parent link="${name}_base"/>
+            <child link="${name}_finger_m"/>
+            <origin xyz="0 0 0.115" rpy="0 0 3.1416"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="0.01" upper="0.02" effort="80.0" velocity="0.05"/>
+            <mimic joint="${name}_joint" multiplier="1.0" offset="0.0"/>
+        </joint>
+
+        <!--tcp -->
+        <link name="${name}"/>
+        <joint name="${name}_gripper" type="fixed">
+            <parent link="${name}_base"/>
+            <child link="${name}"/>
+            <origin xyz="0 0 0.130" rpy="0 0 0"/>
+        </joint>
+    </xacro:macro>
+</robot>

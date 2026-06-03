@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- Gripper-only description for an example visualization -->
+
+<!-- top level -->
+<robot name="gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find papouch_description)/urdf/_materials.urdf.xacro" />
+    <xacro:include filename="$(find papouch_description)/urdf/schunk_gripper.xacro" />
+
+    <link name="base">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+	            <box size="0.5 0.25 0.001"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <xacro:schunk_gripper parent="base" name="gripper"/>
+
+
+    <!-- tcp -->
+    <link name="gripper_link_tool">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+	            <sphere radius="0.001"/>
+            </geometry>
+            <material name="papouch:dummy"/>
+        </visual>
+    </link>
+
+    <joint name="gripper_joint_tool" type="fixed">
+        <parent link="gripper" />
+        <child link="gripper_link_tool" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+
+</robot>

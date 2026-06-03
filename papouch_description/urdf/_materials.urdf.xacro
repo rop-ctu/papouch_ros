@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:property name="papouch_materials_defined" default="false"/>
+    <xacro:unless value="${papouch_materials_defined}">
+        <xacro:property name="papouch_materials_defined" value="true"/>
+
+        <material name="papouch:dummy">
+            <color rgba="1.0 0.5 0.0 1"/>
+        </material>
+
+        <material name="papouch:steel">
+            <color rgba="0.5 0.5 0.5 1"/>
+        </material>
+
+        <material name="papouch:black">
+            <color rgba="0.2 0.2 0.2 1"/>
+        </material>
+
+        <material name="papouch:gray">
+            <color rgba="0.7 0.7 0.7 1"/>
+        </material>
+
+        <material name="papouch:orange">
+            <color rgba="1.0 0.3 0.0 1"/>
+        </material>
+
+        <material name="papouch:yellow">
+            <color rgba="1.0 0.7 0.0 1"/>
+        </material>
+
+    </xacro:unless>
+</robot>
