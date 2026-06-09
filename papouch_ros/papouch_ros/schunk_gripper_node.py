@@ -113,11 +113,11 @@ class SchunkGripperNode(Node):
 
         do_close = req.data
 
-        self.get_logger().info(f"Received new request: {do_close}")
+        self.get_logger().debug(f"Received new request: {do_close}")
 
         result = await self.gripper_activate(do_close)
 
-        self.get_logger().info(f"Result: {result}")
+        self.get_logger().debug(f"Result: {result}")
 
         res.success = result
         return res
@@ -128,7 +128,7 @@ class SchunkGripperNode(Node):
         action_goal: GripperCommand.Goal = goal_handle.request
         goal_position = action_goal.command.position
 
-        self.get_logger().info(f"Received new position goal: {goal_position}")
+        self.get_logger().debug(f"Received new position goal: {goal_position}")
 
         do_close = abs(self.params.joint_min_pos - goal_position) < abs(
             self.params.joint_max_pos - goal_position)
