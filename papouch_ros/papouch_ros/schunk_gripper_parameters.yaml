@@ -62,5 +62,5 @@ schunk_gripper_params:
 
   time_of_motion:
     type: double
-    default_value: 1.0
+    default_value: 0.5
     description: ""

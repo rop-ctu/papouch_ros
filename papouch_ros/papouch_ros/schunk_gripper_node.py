@@ -149,11 +149,11 @@ class SchunkGripperNode(Node):
 
             # convert linear position to discreate state
             if do_close:
-                self.get_logger().info(f"Closing")
+                self.get_logger().debug(f"Closing")
                 goal_position = self.params.joint_min_pos
                 await self.write_io(False, True)
             else:
-                self.get_logger().info(f"Opening")
+                self.get_logger().debug(f"Opening")
                 goal_position = self.params.joint_max_pos
                 await self.write_io(True, False)
 
